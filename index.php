@@ -1,38 +1,32 @@
 <?php  
 
 	require_once 'app/config.php';
-	require_once 'db/db.php';
-	
+
 	session_start();
- 
-	if( isset( $_GET['logout'] ) ) {
-    
-    	unset($_SESSION['usser']);
-    	session_destroy();
-    
-   		header('Location: '.$base_url.'/log');
-		exit();
 
-	}
+    if( isset($_GET['login']) ){
 
-	try{
+        if( $_POST['nick'] == 'root' && $_POST['password'] == 'root' ){
 
-		$sql = 'SELECT content_message, createdat_message, nickname_ussers FROM message JOIN ussers ON message.id_author_message = ussers.id_ussers ORDER BY message.content_message ASC ;';
-		$ps = $pdo->prepare($sql);
-		$ps->execute();
+            $nombre = $_POST['nick'];
+            
+            //Se ha establecido o creado una session
+            $_SESSION['usser'] = $nombre;
 
-		}catch(PDOException $e) {
+            header('Location: main' );
 
-			die("No se ha podido consultar información en la base de datos:". $e->getMessage());
+        }else{
 
-		}
+            echo 'ERROR 404';
 
-	while ($row = $ps->fetch(PDO::FETCH_ASSOC) ) {
+        }
 
-	$listMessage[] = $row;
+        exit();
 
-	}	
+    }else{
 
-	require_once 'index.html.php';	
+        require_once 'index.html.php';
+
+    }
 
 ?>
